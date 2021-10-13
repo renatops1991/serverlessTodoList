@@ -32,13 +32,37 @@ functions:
           path: /health
           method: GET
           cors: true
+  create:
+    handler: src/functions/create-todo.handle
+    events:
+      - http:
+          path: /todo/{user_id}/create
+          method: POST
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: "arn:aws:dynamodb:${self.provider.region}:*:table/todos"
+  show:
+    handler: src/functions/show-todo.handle
+    events:
+      - http:
+          path: /todo/{user_id}/show
+          method: GET
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: "arn:aws:dynamodb:${self.provider.region}:*:table/todos"
 
 resources:
   Resources:
     dbTodoList:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: todo
+        TableName: todos
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
