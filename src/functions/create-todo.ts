@@ -21,8 +21,8 @@ export const handle: APIGatewayProxyHandler = async (event) => {
         id,
         user_id,
         title,
-        done: false,
-        deadline: new Date(deadline),
+        done: done ?? false,
+        deadline,
       },
     })
     .promise();
